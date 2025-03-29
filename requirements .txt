@@ -1,6 +1,6 @@
-streamlit
-google-generativeai==0.2.0
-sounddevice
-numpy
-pandas
-speechrecognition
+streamlit>=1.31.0
+google-generative-ai>=0.7.2
+sounddevice>=0.4.6
+numpy>=1.26.4
+pandas>=2.2.1
+speechrecognition>=3.10.0
