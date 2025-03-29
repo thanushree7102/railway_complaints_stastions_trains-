@@ -17,11 +17,13 @@ import random
 # 📌 Set page config as the FIRST Streamlit command
 st.set_page_config(page_title="Railway Complaint System", layout="wide")
 
-# 🔹 Configure Gemini AI
-genai.configure(api_key=os.getenv("AIzaSyC_-RKF7DAR0RtgAiOI6LgFUGPWXqlASKY", "AIzaSyC2JpLpiqgnaH1BgL_-FTimpglTCxg45Dc"))  # Use env var or replace with valid key
+# 🔹 Configure Gemini AI using environment variable for API key
+genai.configure(api_key=os.getenv("AIzaSyC2JpLpiqgnaH1BgL_-FTimpglTCxg45Dc"))
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-# Rest of your code...
+# 🔹 Define valid PNR numbers
+VALID_PNR_NUMBERS = {f"PNRA{i}" for i in range(1, 11)} | {f"PNRB{i}" for i in range(1, 11)}
+
 # 🚀 Supported languages for speech recognition
 LANGUAGE_MAP = {
     "Assamese": "as-IN", "Bengali": "bn-IN", "Bodo": "brx-IN",
@@ -48,14 +50,14 @@ CATEGORY_MAP = {
     "MISCELLANEOUS": ["Miscellaneous"]
 }
 
-# 📧 Email Credentials (App Passwords)
+# 📧 Email Credentials (App Passwords) - Use environment variables for security
 EMAIL_CREDENTIALS = {
-    "tshree4179@gmail.com": "pcxkzqekbymmpywi",
-    "vis12356789@gmail.com": "jpprsezowjfabtdi",
-    "sphalguna17@gmail.com": "qncwrnpbetipmxvx",
-    "mohitv9110@gmail.com": "xbgohksvkgvslisv",
-    "sn3951418@gmail.com": "syltqmkdhwdemway",
-    "manjushreemr18@gmail.com": "skrdbhwptqxjtyte"
+    "tshree4179@gmail.com": os.getenv("EMAIL_PASS_TSHREE"),
+    "vis12356789@gmail.com": os.getenv("EMAIL_PASS_VIS"),
+    "sphalguna17@gmail.com": os.getenv("EMAIL_PASS_SPHALGUNA"),
+    "mohitv9110@gmail.com": os.getenv("EMAIL_PASS_MOHIT"),
+    "sn3951418@gmail.com": os.getenv("EMAIL_PASS_SN"),
+    "manjushreemr18@gmail.com": os.getenv("EMAIL_PASS_MANJUSHREE")
 }
 
 # 📧 Email recipients based on category
@@ -115,8 +117,8 @@ LANGUAGE_PLACEHOLDERS = {
 
 # 🔧 SQLite Database Setup with Schema Migration
 def init_db():
-    # Use os.path.join for proper path construction
-    db_path = os.path.join(r"C:\Users\user\Documents", "complaints.db")
+    # Use relative path for database
+    db_path = os.path.join(os.getcwd(), "complaints.db")
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
 
@@ -176,7 +178,7 @@ init_db()
 
 def save_to_db(complaint_data):
     try:
-        db_path = os.path.join(r"C:\Users\user\Documents", "complaints.db")
+        db_path = os.path.join(os.getcwd(), "complaints.db")
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
         c.execute('''
@@ -202,7 +204,7 @@ def save_to_db(complaint_data):
 
 def read_from_db():
     try:
-        db_path = os.path.join(r"C:\Users\user\Documents", "complaints.db")
+        db_path = os.path.join(os.getcwd(), "complaints.db")
         conn = sqlite3.connect(db_path)
         df = pd.read_sql_query("SELECT * FROM complaints", conn)
         return df
@@ -300,9 +302,7 @@ def send_complaint_email(category, subcategories, complaint_text, user_phone, pn
     """, charset="utf-8")
 
     try:
-        server = smtplib.SMTP("smtp.gmail.com", 587
-
-)
+        server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
         server.login(sender_email, sender_password)
         server.send_message(msg)
