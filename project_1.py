@@ -18,12 +18,10 @@ import random
 st.set_page_config(page_title="Railway Complaint System", layout="wide")
 
 # 🔹 Configure Gemini AI
-genai.configure(api_key="AIzaSyC2JpLpiqgnaH1BgL_-FTimpglTCxg45Dc")  # Replace with your valid API key
+genai.configure(api_key=os.getenv("AIzaSyC_-RKF7DAR0RtgAiOI6LgFUGPWXqlASKY", "AIzaSyC2JpLpiqgnaH1BgL_-FTimpglTCxg45Dc"))  # Use env var or replace with valid key
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-# 🔹 Define valid PNR numbers
-VALID_PNR_NUMBERS = {f"PNRA{i}" for i in range(1, 11)} | {f"PNRB{i}" for i in range(1, 11)}
-
+# Rest of your code...
 # 🚀 Supported languages for speech recognition
 LANGUAGE_MAP = {
     "Assamese": "as-IN", "Bengali": "bn-IN", "Bodo": "brx-IN",
