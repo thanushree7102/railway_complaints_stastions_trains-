@@ -1,3 +1,4 @@
+
 import streamlit as st
 import google.generativeai as genai
 import sounddevice as sd
@@ -14,15 +15,17 @@ import sqlite3
 from datetime import datetime
 import random
 
-# 📌 Set page config as the FIRST Streamlit command
+# Set page config as the FIRST Streamlit command
 st.set_page_config(page_title="Railway Complaint System", layout="wide")
 
-# 🔹 Configure Gemini AI using environment variable for API key
-genai.configure(api_key=os.getenv("AIzaSyC2JpLpiqgnaH1BgL_-FTimpglTCxg45Dc"))
+# Configure Gemini AI
+genai.configure(api_key="AIzaSyC2JpLpiqgnaH1BgL_-FTimpglTCxg45Dc")  # Direct API key
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-# 🔹 Define valid PNR numbers
+# Define valid PNR numbers
 VALID_PNR_NUMBERS = {f"PNRA{i}" for i in range(1, 11)} | {f"PNRB{i}" for i in range(1, 11)}
+# 🔹 Define valid PNR numbers
+
 
 # 🚀 Supported languages for speech recognition
 LANGUAGE_MAP = {
